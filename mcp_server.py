@@ -90,29 +90,44 @@ async def get_docs(query :str, library: str):
     """
     Search to get official latest documentation content based on query and library name 
     supports langchain, openai, chromadb, pinecone, uvicorn, fastapi, llama-index.
+
+    Args:
+        query (str): The query to find e.g. "Build a REST API endpoint to upload files".
+        library (str): The library to be searched is e.g. "fastapi".
+    
+    Returns:
+        str: Summarized content from official documentation.
+
     """
 
     #NORMALIZATIONS
-    # ✅ convert library to lowercase for consistent matching
+    # convert library to lowercase for consistent matching
     library = library.lower()
 
-    # ✅ convert keys of docs_urls also temporarily to lowercase for lookup
+    # convert keys of docs_urls also temporarily to lowercase for lookup
     lowercased_docs_url = {k.lower(): v for k, v in docs_urls.items()}
 
+
+    # we dont wanrt to scrape general docs, but official docs reponses should be received from web search
+    # if tool not found in docs then create general responses
     if library not in lowercased_docs_url:
         raise ValueError(f"❌ Library {library} documentation URL not found")
-
+    
+    # strategy to get what we want => https://python.langchain.com/docs/ chromadb connection
     query = f"site:{lowercased_docs_url[library]} {query}"
 
     results = await web_Search(query=query)
 
+     # if we dont get any results
     if len(results['organic']) == 0:
         return f"❌ No results found for query: {query}"
     
     text_part = []
     for r in results['organic']:
-        link = r.get("link", "")
+        link = r.get("link", "") # getting link from each organic result
         raw = await fetch_url(link)
+
+        # we want to see authentic info, so need to see from which url we are getting content
         if raw:
             labeled = f"Source: {link}\n{raw}"
             print("Source :", link)
