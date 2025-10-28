@@ -26,8 +26,8 @@ async def main():
            
             print("Available Tools:",[t.name for t in tools_reponse.tools])
 
-            query = "How to connect to chromadb DB with llama-index in python?"
-            library = "llama-index"
+            query = "How to connect to chromadb DB with langchain in python?"
+            library = "langchain"
             res = await sessions.call_tool(
                 "get_docs",
                 arguments = {
