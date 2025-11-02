@@ -34,6 +34,7 @@ async def fetch_js_url(url: str) -> str:
         await page.goto(url)
         content = await page.content()
         await browser.close()
+        print(f"content fetched {url}: {content[:500]}")
         return content
     
 def get_response_from_llm(user_prompt, system_prompt,model):
@@ -51,4 +52,6 @@ def get_response_from_llm(user_prompt, system_prompt,model):
     return chat_completion.choices[0].message.content
 
 # testing the function call
-#print(get_response_from_llm(user_prompt="what is capital of India?", system_prompt="You are a helpful assistant.", model="openai/gpt-oss-20b"))
+# print(get_response_from_llm(user_prompt="what is capital of India?", 
+#                               system_prompt="You are a helpful assistant.", 
+#                                   model="openai/gpt-oss-20b"))
