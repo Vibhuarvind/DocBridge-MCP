@@ -34,7 +34,7 @@ async def fetch_js_url(url: str) -> str:
         await page.goto(url)
         content = await page.content()
         await browser.close()
-        print(f"content fetched {url}: {content[:500]}")
+        # debug(f"content fetched {url}: {content[:500]}")
         return content
     
 def get_response_from_llm(user_prompt, system_prompt,model):

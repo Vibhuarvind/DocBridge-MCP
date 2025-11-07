@@ -218,7 +218,7 @@ async def get_docs(query :str, library: str):
         # we want to see authentic info, so need to see from which url we are getting content
         if raw:
             labeled = f"Source: {link}\n{raw}"
-            print("Source :", link)
+            debug(f"Source : {link}")
             text_part.append(labeled)
     
     debug('-'*60)
@@ -231,4 +231,7 @@ def main():
     MCP.run(transport="stdio")
 
 if __name__ == "__main__":
-    main()   
+    try:
+        main()
+    finally:
+        DEBUG_FILE.close()  
